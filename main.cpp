@@ -2,18 +2,14 @@
 
 int main() {
     // int a[4] = {1324234,2,3,5};
-    BigInteger num1(13);
-    BigInteger num2(123);
-    BigInteger num3 = num2 + num1;
+    BigInteger num1(-76);
+    BigInteger num2(6);
+    BigInteger num67("-190787");
+    BigInteger num3 = num2 * num1;
 
     std::cout << (num1 < num2) << std::endl;
 
-    std::cout << "num 1 << " << (num1.is_negative() ? "-" : "") << num1.get_value();
-    std::cout << std::endl;
-    std::cout << "num 2 << " << (num2.is_negative() ? "-" : "") << num2.get_value();
-    std::cout << std::endl;
-    std::cout << "num 3 << " << (num3.is_negative() ? "-" : "") << num3.get_value();
-    std::cout << std::endl;
+    num3.print();
 
     // BigInteger num2(a, 4, true);
 

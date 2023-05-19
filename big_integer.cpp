@@ -63,6 +63,23 @@ std::string reverse_string(const std::string& str)
 
 }
 
+std::string remove_zeros(std::string str)
+{
+	int i = 0;
+	
+	std::string res = str;
+
+	for(; i < str.size(); ++i){
+		if(str[i] != '0'){
+			break;
+		}
+	}
+
+	res.erase(0, i);
+
+	return res;
+}
+
 std::string get_concated_string(int * arr, unsigned int size)
 {
     std::string res = "";
@@ -293,6 +310,26 @@ operator+(BigInteger& other)
 }
 
 BigInteger BigInteger::
+operator*(BigInteger& other)
+{
+	if(this->is_negative() ^ other.is_negative()){
+		return -(multiply(this, &other));
+	} else {
+		return multiply(this, &other);
+	}
+}
+
+BigInteger BigInteger::
+operator/(BigInteger& other)
+{
+	if(this->is_negative() ^ other.is_negative()){
+		return -(divide(this, &other));
+	} else {
+		return divide(this, &other);
+	}
+}
+
+BigInteger BigInteger::
 add(BigInteger* a, BigInteger* b)
 {
 	std::string a_r = reverse_string(a->get_value());
@@ -332,7 +369,7 @@ add(BigInteger* a, BigInteger* b)
 	res += char(1 + '0');
 	}
 
-	return BigInteger(string_to_int(reverse_string(res)));
+	return BigInteger(reverse_string(res));
 }
 
 
@@ -376,8 +413,60 @@ subtract(BigInteger* a, BigInteger* b)
 			res += char(tmp + '0');
 		}
 	}
-    
-	return BigInteger(string_to_int(reverse_string(res)));
+	
+	res = remove_zeros(reverse_string(res));
+	return BigInteger(res);
+}
+
+BigInteger BigInteger::
+multiply(BigInteger* a, BigInteger* b)
+{
+	std::string a_r = reverse_string(a->get_value());
+	std::string b_r = reverse_string(b->get_value());
+
+	BigInteger res_of_multiple(0);
+
+	for(int i = 0; i < a_r.size(); ++i){
+		unsigned int x = (int)(a_r[i] - '0');
+
+		int reserve = 0;
+		std::string res = "";
+
+		for(int j = 0; j < b_r.size(); ++j){
+			unsigned int y = (int)(b_r[j] - '0');
+			
+			int tmp_val = x * y + reserve;
+
+			reserve = 0;
+			res += char((tmp_val) % 10 + '0');
+
+			if(tmp_val > 9){
+				reserve = tmp_val / 10;
+			}
+		}
+
+		if(reserve != 0){
+			res += char((reserve) + '0');
+		}
+
+		res = reverse_string(res);
+
+		for(int l = 0; l < i; ++l){
+			res += "0";
+		}
+
+		BigInteger tmp(res);
+		tmp.print();
+		res_of_multiple += tmp;
+	}
+	res_of_multiple.print();
+	return res_of_multiple;
+}
+
+BigInteger BigInteger::
+divide(BigInteger* a, BigInteger* b)
+{
+	return BigInteger(0);
 }
 
 BigInteger::
@@ -393,15 +482,17 @@ BigInteger(int val)
 }
 
 BigInteger::
-BigInteger(int* vals, unsigned int size, bool is_negative_int)
+BigInteger(std::string str)
 {
-	// std::cout << "BigInteger constructor #2" << std::endl;
+	if(str[0] == '-')
+	{
+		set_sign(true);
+		str.erase(0, 1);
+	} else {
+		set_sign(false);
+	}
 
-	set_sign(is_negative_int);
-
-	set_value(get_concated_string(vals, size));
-
-	// std::cout << "value is : " << (is_negative_int ? "-" : "") << get_value() << std::endl;
+	set_value(str);
 }
 
 BigInteger::

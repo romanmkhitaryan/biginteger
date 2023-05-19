@@ -25,6 +25,8 @@ public:
     static comparison_type compare_two_big_intagers(BigInteger*, BigInteger*);
     static BigInteger subtract(BigInteger*, BigInteger*);
     static BigInteger add(BigInteger*, BigInteger*);
+    static BigInteger multiply(BigInteger*, BigInteger*);
+    static BigInteger divide(BigInteger*, BigInteger*);
 
 public:
 
@@ -43,9 +45,11 @@ public:
     BigInteger operator-(BigInteger& other);
     BigInteger& operator+=(BigInteger& other);
     BigInteger& operator-=(BigInteger& other);
+    BigInteger operator*(BigInteger& other);
+    BigInteger operator/(BigInteger& other);
 
 public:
     BigInteger(int);
-    BigInteger(int*, unsigned int, bool = false);
+    BigInteger(std::string);
     ~BigInteger();
 };
